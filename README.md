@@ -115,7 +115,7 @@ To set up and run this project locally:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/TanishqGupta1234/DomesticEase.git
+git clone https://github.com/khushipragati/domesticease.git
    cd DomesticEase
    ```
 

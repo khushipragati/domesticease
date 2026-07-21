@@ -5,8 +5,19 @@ import userModel from "../models/userModel.js";
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
 import { v2 as cloudinary } from 'cloudinary'
+import Razorpay from 'razorpay'
+import Stripe from 'stripe'
 
 // Gateway Initialize
+const razorpayInstance = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+})
+
+const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
+
+// how long login/register tokens stay valid before requiring re-login
+const TOKEN_EXPIRY = '7d'
 
 // API to register user
 const registerUser = async (req, res) => {
@@ -41,7 +52,7 @@ const registerUser = async (req, res) => {
 
         const newUser = new userModel(userData)
         const user = await newUser.save()
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: TOKEN_EXPIRY })
 
         res.json({ success: true, token })
 
@@ -56,6 +67,13 @@ const loginUser = async (req, res) => {
 
     try {
         const { email, password } = req.body;
+
+        // reject non-string email/password so a crafted object (e.g. a Mongo
+        // operator like { "$ne": null }) can never reach the query below
+        if (typeof email !== 'string' || typeof password !== 'string') {
+            return res.json({ success: false, message: "Invalid credentials" })
+        }
+
         const user = await userModel.findOne({ email })
 
         if (!user) {
@@ -65,7 +83,7 @@ const loginUser = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password)
 
         if (isMatch) {
-            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: TOKEN_EXPIRY })
             res.json({ success: true, token })
         }
         else {
