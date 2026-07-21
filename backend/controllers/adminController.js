@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import appointmentModel from "../models/appointmentModel.js";
-import doctorModel from "../models/doctorModel.js";
+import helperModel from "../models/helperModel.js";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import { v2 as cloudinary } from "cloudinary";
@@ -57,16 +57,16 @@ const appointmentCancel = async (req, res) => {
 
         await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true })
 
-        // free up the doctor's slot — previously only the user-side cancel
+        // free up the helper's slot — previously only the user-side cancel
         // did this, so admin-cancelled slots stayed blocked forever
-        const { docId, slotDate, slotTime } = appointmentData
-        const doctorData = await doctorModel.findById(docId)
+        const { helperId, slotDate, slotTime } = appointmentData
+        const helperData = await helperModel.findById(helperId)
 
-        if (doctorData) {
-            let slots_booked = doctorData.slots_booked
+        if (helperData) {
+            let slots_booked = helperData.slots_booked
             if (slots_booked[slotDate]) {
                 slots_booked[slotDate] = slots_booked[slotDate].filter(e => e !== slotTime)
-                await doctorModel.findByIdAndUpdate(docId, { slots_booked })
+                await helperModel.findByIdAndUpdate(helperId, { slots_booked })
             }
         }
 
@@ -79,15 +79,15 @@ const appointmentCancel = async (req, res) => {
 
 }
 
-// API for adding Doctor
-const addDoctor = async (req, res) => {
+// API for adding Helper
+const addHelper = async (req, res) => {
 
     try {
 
         const { name, email, password, speciality, degree, experience, about, fees, address } = req.body
         const imageFile = req.file
 
-        // checking for all data to add doctor
+        // checking for all data to add helper
         if (!name || !email || !password || !speciality || !degree || !experience || !about || !fees || !address) {
             return res.json({ success: false, message: "Missing Details" })
         }
@@ -110,7 +110,7 @@ const addDoctor = async (req, res) => {
         const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" })
         const imageUrl = imageUpload.secure_url
 
-        const doctorData = {
+        const helperData = {
             name,
             email,
             image: imageUrl,
@@ -124,9 +124,9 @@ const addDoctor = async (req, res) => {
             date: Date.now()
         }
 
-        const newDoctor = new doctorModel(doctorData)
-        await newDoctor.save()
-        res.json({ success: true, message: 'Doctor Added' })
+        const newHelper = new helperModel(helperData)
+        await newHelper.save()
+        res.json({ success: true, message: 'Helper Added' })
 
     } catch (error) {
         console.log(error)
@@ -134,12 +134,12 @@ const addDoctor = async (req, res) => {
     }
 }
 
-// API to get all doctors list for admin panel
-const allDoctors = async (req, res) => {
+// API to get all helpers list for admin panel
+const allHelpers = async (req, res) => {
     try {
 
-        const doctors = await doctorModel.find({}).select('-password')
-        res.json({ success: true, doctors })
+        const helpers = await helperModel.find({}).select('-password')
+        res.json({ success: true, helpers })
 
     } catch (error) {
         console.log(error)
@@ -151,14 +151,14 @@ const allDoctors = async (req, res) => {
 const adminDashboard = async (req, res) => {
     try {
 
-        const doctors = await doctorModel.find({})
+        const helpers = await helperModel.find({})
         const users = await userModel.find({})
         const appointments = await appointmentModel.find({})
 
         const dashData = {
-            doctors: doctors.length,
+            helpers: helpers.length,
             appointments: appointments.length,
-            patients: users.length,
+            customers: users.length,
             latestAppointments: appointments.reverse()
         }
 
@@ -174,7 +174,7 @@ export {
     loginAdmin,
     appointmentsAdmin,
     appointmentCancel,
-    addDoctor,
-    allDoctors,
+    addHelper,
+    allHelpers,
     adminDashboard
 }

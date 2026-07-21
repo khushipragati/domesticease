@@ -12,17 +12,17 @@ const AdminContextProvider = (props) => {
     const [aToken, setAToken] = useState(localStorage.getItem('aToken') ? localStorage.getItem('aToken') : '')
 
     const [appointments, setAppointments] = useState([])
-    const [doctors, setDoctors] = useState([])
+    const [helpers, setHelpers] = useState([])
     const [dashData, setDashData] = useState(false)
 
-    // Getting all Doctors data from Database using API
-    const getAllDoctors = async () => {
+    // Getting all Helpers data from Database using API
+    const getAllHelpers = async () => {
 
         try {
 
-            const { data } = await axios.get(backendUrl + '/api/admin/all-doctors', { headers: { aToken } })
+            const { data } = await axios.get(backendUrl + '/api/admin/all-helpers', { headers: { aToken } })
             if (data.success) {
-                setDoctors(data.doctors)
+                setHelpers(data.helpers)
             } else {
                 toast.error(data.message)
             }
@@ -33,14 +33,14 @@ const AdminContextProvider = (props) => {
 
     }
 
-    // Function to change doctor availablity using API
-    const changeAvailability = async (docId) => {
+    // Function to change helper availablity using API
+    const changeAvailability = async (helperId) => {
         try {
 
-            const { data } = await axios.post(backendUrl + '/api/admin/change-availability', { docId }, { headers: { aToken } })
+            const { data } = await axios.post(backendUrl + '/api/admin/change-availability', { helperId }, { headers: { aToken } })
             if (data.success) {
                 toast.success(data.message)
-                getAllDoctors()
+                getAllHelpers()
             } else {
                 toast.error(data.message)
             }
@@ -113,8 +113,8 @@ const AdminContextProvider = (props) => {
 
     const value = {
         aToken, setAToken,
-        doctors,
-        getAllDoctors,
+        helpers,
+        getAllHelpers,
         changeAvailability,
         appointments,
         getAllAppointments,

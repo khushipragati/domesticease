@@ -1,15 +1,15 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import doctorModel from "../models/doctorModel.js";
+import helperModel from "../models/helperModel.js";
 import appointmentModel from "../models/appointmentModel.js";
 
-// API for doctor Login 
-const loginDoctor = async (req, res) => {
+// API for helper Login 
+const loginHelper = async (req, res) => {
 
     try {
 
         const { email, password } = req.body
-        const user = await doctorModel.findOne({ email })
+        const user = await helperModel.findOne({ email })
 
         if (!user) {
             return res.json({ success: false, message: "Invalid credentials" })
@@ -31,12 +31,12 @@ const loginDoctor = async (req, res) => {
     }
 }
 
-// API to get doctor appointments for doctor panel
-const appointmentsDoctor = async (req, res) => {
+// API to get helper appointments for helper panel
+const appointmentsHelper = async (req, res) => {
     try {
 
-        const { docId } = req.body
-        const appointments = await appointmentModel.find({ docId })
+        const { helperId } = req.body
+        const appointments = await appointmentModel.find({ helperId })
 
         res.json({ success: true, appointments })
 
@@ -46,14 +46,14 @@ const appointmentsDoctor = async (req, res) => {
     }
 }
 
-// API to cancel appointment for doctor panel
+// API to cancel appointment for helper panel
 const appointmentCancel = async (req, res) => {
     try {
 
-        const { docId, appointmentId } = req.body
+        const { helperId, appointmentId } = req.body
 
         const appointmentData = await appointmentModel.findById(appointmentId)
-        if (appointmentData && appointmentData.docId === docId) {
+        if (appointmentData && appointmentData.helperId === helperId) {
             await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true })
             return res.json({ success: true, message: 'Appointment Cancelled' })
         }
@@ -67,14 +67,14 @@ const appointmentCancel = async (req, res) => {
 
 }
 
-// API to mark appointment completed for doctor panel
+// API to mark appointment completed for helper panel
 const appointmentComplete = async (req, res) => {
     try {
 
-        const { docId, appointmentId } = req.body
+        const { helperId, appointmentId } = req.body
 
         const appointmentData = await appointmentModel.findById(appointmentId)
-        if (appointmentData && appointmentData.docId === docId) {
+        if (appointmentData && appointmentData.helperId === helperId) {
             await appointmentModel.findByIdAndUpdate(appointmentId, { isCompleted: true })
             return res.json({ success: true, message: 'Appointment Completed' })
         }
@@ -88,12 +88,12 @@ const appointmentComplete = async (req, res) => {
 
 }
 
-// API to get all doctors list for Frontend
-const doctorList = async (req, res) => {
+// API to get all helpers list for Frontend
+const helperList = async (req, res) => {
     try {
 
-        const doctors = await doctorModel.find({}).select(['-password', '-email'])
-        res.json({ success: true, doctors })
+        const helpers = await helperModel.find({}).select(['-password', '-email'])
+        res.json({ success: true, helpers })
 
     } catch (error) {
         console.log(error)
@@ -102,14 +102,14 @@ const doctorList = async (req, res) => {
 
 }
 
-// API to change doctor availablity for Admin and Doctor Panel
+// API to change helper availablity for Admin and Helper Panel
 const changeAvailablity = async (req, res) => {
     try {
 
-        const { docId } = req.body
+        const { helperId } = req.body
 
-        const docData = await doctorModel.findById(docId)
-        await doctorModel.findByIdAndUpdate(docId, { available: !docData.available })
+        const helperData = await helperModel.findById(helperId)
+        await helperModel.findByIdAndUpdate(helperId, { available: !helperData.available })
         res.json({ success: true, message: 'Availablity Changed' })
 
     } catch (error) {
@@ -118,12 +118,12 @@ const changeAvailablity = async (req, res) => {
     }
 }
 
-// API to get doctor profile for  Doctor Panel
-const doctorProfile = async (req, res) => {
+// API to get helper profile for  Helper Panel
+const helperProfile = async (req, res) => {
     try {
 
-        const { docId } = req.body
-        const profileData = await doctorModel.findById(docId).select('-password')
+        const { helperId } = req.body
+        const profileData = await helperModel.findById(helperId).select('-password')
 
         res.json({ success: true, profileData })
 
@@ -133,13 +133,13 @@ const doctorProfile = async (req, res) => {
     }
 }
 
-// API to update doctor profile data from  Doctor Panel
-const updateDoctorProfile = async (req, res) => {
+// API to update helper profile data from  Helper Panel
+const updateHelperProfile = async (req, res) => {
     try {
 
-        const { docId, fees, address, available } = req.body
+        const { helperId, fees, address, available } = req.body
 
-        await doctorModel.findByIdAndUpdate(docId, { fees, address, available })
+        await helperModel.findByIdAndUpdate(helperId, { fees, address, available })
 
         res.json({ success: true, message: 'Profile Updated' })
 
@@ -149,13 +149,13 @@ const updateDoctorProfile = async (req, res) => {
     }
 }
 
-// API to get dashboard data for doctor panel
-const doctorDashboard = async (req, res) => {
+// API to get dashboard data for helper panel
+const helperDashboard = async (req, res) => {
     try {
 
-        const { docId } = req.body
+        const { helperId } = req.body
 
-        const appointments = await appointmentModel.find({ docId })
+        const appointments = await appointmentModel.find({ helperId })
 
         let earnings = 0
 
@@ -165,11 +165,11 @@ const doctorDashboard = async (req, res) => {
             }
         })
 
-        let patients = []
+        let customers = []
 
         appointments.map((item) => {
-            if (!patients.includes(item.userId)) {
-                patients.push(item.userId)
+            if (!customers.includes(item.userId)) {
+                customers.push(item.userId)
             }
         })
 
@@ -178,7 +178,7 @@ const doctorDashboard = async (req, res) => {
         const dashData = {
             earnings,
             appointments: appointments.length,
-            patients: patients.length,
+            customers: customers.length,
             latestAppointments: appointments.reverse()
         }
 
@@ -191,13 +191,13 @@ const doctorDashboard = async (req, res) => {
 }
 
 export {
-    loginDoctor,
-    appointmentsDoctor,
+    loginHelper,
+    appointmentsHelper,
     appointmentCancel,
-    doctorList,
+    helperList,
     changeAvailablity,
     appointmentComplete,
-    doctorDashboard,
-    doctorProfile,
-    updateDoctorProfile
+    helperDashboard,
+    helperProfile,
+    updateHelperProfile
 }

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../context/AppContext'
 import { useNavigate, useParams } from 'react-router-dom'
 
-const Doctors = () => {
+const Helpers = () => {
 
   const { speciality } = useParams()
 
@@ -10,31 +10,31 @@ const Doctors = () => {
   const [showFilter, setShowFilter] = useState(false)
   const navigate = useNavigate();
 
-  const { doctors } = useContext(AppContext)
+  const { helpers } = useContext(AppContext)
 
   const applyFilter = () => {
     if (speciality) {
-      setFilterDoc(doctors.filter(doc => doc.speciality === speciality))
+      setFilterDoc(helpers.filter(doc => doc.speciality === speciality))
     } else {
-      setFilterDoc(doctors)
+      setFilterDoc(helpers)
     }
   }
 
   useEffect(() => {
     applyFilter()
-  }, [doctors, speciality])
+  }, [helpers, speciality])
 
   return (
     <div>
-      <p className='text-gray-600'>Browse through the helpers specialist.</p>
+      <p className='text-gray-600'>Browse through our verified helpers.</p>
       <div className='flex flex-col sm:flex-row items-start gap-5 mt-5'>
         <button onClick={() => setShowFilter(!showFilter)} className={`py-1 px-3 border rounded text-sm  transition-all sm:hidden ${showFilter ? 'bg-primary text-white' : ''}`}>Filters</button>
         <div className={`flex-col gap-4 text-sm text-gray-600 ${showFilter ? 'flex' : 'hidden sm:flex'}`}>
-          <p onClick={() => speciality === 'General physician' ? navigate('/doctors') : navigate('/doctors/General physician')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === 'General physician' ? 'bg-[#E2E5FF] text-black ' : ''}`}>Domestic help</p>
-          <p onClick={() => speciality === 'Gynecologist' ? navigate('/doctors') : navigate('/doctors/Gynecologist')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === 'Gynecologist' ? 'bg-[#E2E5FF] text-black ' : ''}`}>Cooks</p>
-          <p onClick={() => speciality === 'Dermatologist' ? navigate('/doctors') : navigate('/doctors/Dermatologist')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === 'Dermatologist' ? 'bg-[#E2E5FF] text-black ' : ''}`}>All Rounder</p>
-          <p onClick={() => speciality === 'Pediatricians' ? navigate('/doctors') : navigate('/doctors/Pediatricians')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === 'Pediatricians' ? 'bg-[#E2E5FF] text-black ' : ''}`}>Babysitter</p>
-          <p onClick={() => speciality === 'Neurologist' ? navigate('/doctors') : navigate('/doctors/Neurologist')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === 'Neurologist' ? 'bg-[#E2E5FF] text-black ' : ''}`}>24-Hrs Fulltime</p>
+          <p onClick={() => speciality === 'Domestic help' ? navigate('/helpers') : navigate('/helpers/Domestic help')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === 'Domestic help' ? 'bg-[#E2E5FF] text-black ' : ''}`}>Domestic help</p>
+          <p onClick={() => speciality === 'Cooks' ? navigate('/helpers') : navigate('/helpers/Cooks')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === 'Cooks' ? 'bg-[#E2E5FF] text-black ' : ''}`}>Cooks</p>
+          <p onClick={() => speciality === 'All Rounder' ? navigate('/helpers') : navigate('/helpers/All Rounder')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === 'All Rounder' ? 'bg-[#E2E5FF] text-black ' : ''}`}>All Rounder</p>
+          <p onClick={() => speciality === 'Babysitter' ? navigate('/helpers') : navigate('/helpers/Babysitter')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === 'Babysitter' ? 'bg-[#E2E5FF] text-black ' : ''}`}>Babysitter</p>
+          <p onClick={() => speciality === '24-Hrs Fulltime' ? navigate('/helpers') : navigate('/helpers/24-Hrs Fulltime')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === '24-Hrs Fulltime' ? 'bg-[#E2E5FF] text-black ' : ''}`}>24-Hrs Fulltime</p>
         </div>
         <div className='w-full grid grid-cols-auto gap-4 gap-y-6'>
           {filterDoc.map((item, index) => (
@@ -55,4 +55,4 @@ const Doctors = () => {
   )
 }
 
-export default Doctors
+export default Helpers

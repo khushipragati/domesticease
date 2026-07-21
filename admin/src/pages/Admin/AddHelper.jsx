@@ -5,7 +5,7 @@ import axios from 'axios'
 import { AdminContext } from '../../context/AdminContext'
 import { AppContext } from '../../context/AppContext'
 
-const AddDoctor = () => {
+const AddHelper = () => {
 
     const [docImg, setDocImg] = useState(false)
     const [name, setName] = useState('')
@@ -14,7 +14,7 @@ const AddDoctor = () => {
     const [experience, setExperience] = useState('1 Year')
     const [fees, setFees] = useState('')
     const [about, setAbout] = useState('')
-    const [speciality, setSpeciality] = useState('General physician')
+    const [speciality, setSpeciality] = useState('Domestic help')
     const [degree, setDegree] = useState('')
     const [address1, setAddress1] = useState('')
     const [address2, setAddress2] = useState('')
@@ -49,7 +49,7 @@ const AddDoctor = () => {
                 console.log(`${key}: ${value}`);
             });
 
-            const { data } = await axios.post(backendUrl + '/api/admin/add-doctor', formData, { headers: { aToken } })
+            const { data } = await axios.post(backendUrl + '/api/admin/add-helper', formData, { headers: { aToken } })
             if (data.success) {
                 toast.success("Helper added successfully")
                 setDocImg(false)
@@ -171,4 +171,4 @@ const AddDoctor = () => {
     )
 }
 
-export default AddDoctor
+export default AddHelper

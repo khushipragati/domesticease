@@ -1,12 +1,12 @@
 import React from 'react'
 import { useContext, useEffect } from 'react'
-import { DoctorContext } from '../../context/DoctorContext'
+import { HelperContext } from '../../context/HelperContext'
 import { AppContext } from '../../context/AppContext'
 import { assets } from '../../assets/assets'
 
-const DoctorAppointments = () => {
+const HelperAppointments = () => {
 
-  const { dToken, appointments, getAppointments, cancelAppointment, completeAppointment } = useContext(DoctorContext)
+  const { dToken, appointments, getAppointments, cancelAppointment, completeAppointment } = useContext(HelperContext)
   const { slotDateFormat, calculateAge, currency } = useContext(AppContext)
 
   useEffect(() => {
@@ -61,4 +61,4 @@ const DoctorAppointments = () => {
   )
 }
 
-export default DoctorAppointments
+export default HelperAppointments

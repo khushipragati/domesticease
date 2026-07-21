@@ -15,7 +15,7 @@
 ### 1. Three-Level Authentication
 
 - **User Login**: 
-  - Patients can sign up, log in, and book appointments with doctors.
+  - Patients can sign up, log in, and book appointments with helpers.
   - Manage appointments (view, cancel, or reschedule).
   - Secure online payment options available (cash, Stripe, Razorpay).
   - User profile with editable information (name, email, address, gender, birthday, profile picture).
@@ -27,7 +27,7 @@
   - View appointment details (patient info, payment mode, appointment status).
 
 - **Admin Login**:
-  - Admins can create and manage doctor profiles.
+  - Admins can create and manage helper profiles.
   - Dashboard with analytics: total helpers, total appointments, total users, and recent bookings.
   - Add new helpers (image, specialty, degree, experience, address, fees, etc.).
   - View and manage all appointments (cancel or mark as completed).
@@ -63,10 +63,10 @@
 
 ## 📅 Helper Appointment Page
 
-- Displays detailed information about the selected doctor:
+- Displays detailed information about the selected helper:
   - **Profile picture, qualification, experience**, and a brief description.
   - **Appointment booking form**: Choose date, time, and payment method.
-  - **Related doctors** section at the bottom.
+  - **Related helpers** section at the bottom.
 - Users need to **create an account or log in** before booking an appointment.
 
 ## 👤 User Profile
@@ -81,14 +81,14 @@
 ## 🗄️ Admin Panel
 
 - **Dashboard**:
-  - Displays statistics: **Number of doctors**, **appointments**, **patients**, and **latest bookings**.
+  - Displays statistics: **Number of helpers**, **appointments**, **patients**, and **latest bookings**.
   - Option to **cancel bookings** if needed.
 - **Add Helpers**:
-  - Form to add a new doctor profile (image, specialty, email, password, degree, address, experience, fees, description).
+  - Form to add a new helper profile (image, specialty, email, password, degree, address, experience, fees, description).
 - **Helpers List**:
-  - View all registered doctors with options to edit or delete profiles.
+  - View all registered helpers with options to edit or delete profiles.
 - **Appointments**:
-  - List of all appointments including patient name, age, date, time, doctor name, fees.
+  - List of all appointments including patient name, age, date, time, helper name, fees.
   - Admin actions: **Cancel** or **Mark as Completed**.
 
 ## 🩺 Helpers Dashboard
@@ -99,7 +99,7 @@
   - View detailed list of patient appointments (name, age, date, time, payment mode, status).
   - Actions: **Mark appointment as completed** or **Cancel appointment**.
 - **Profile Management**:
-  - Doctors can update their **profile information**, including description, fees, address, and availability status.
+  - Helpers can update their **profile information**, including description, fees, address, and availability status.
 
 ## 💳 Payment Integration
 
